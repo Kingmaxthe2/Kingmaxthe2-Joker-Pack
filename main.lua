@@ -634,7 +634,7 @@ SMODS.Joker{ -- Memory Card
         name = "Memory Card",
         text = {
           "{C:chips}+#3#{} Chips when run is {C:chips}Saved",
-           "with less than {C:attention}#2#{} jokers",
+           --"with less than {C:attention}#2#{} jokers",
 		  '{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)'
         },
         --[[unlock = {
@@ -642,7 +642,7 @@ SMODS.Joker{ -- Memory Card
         }]]
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 2, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
+    rarity = 3, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
     --soul_pos = { x = 0, y = 0 },
     cost = 8, --cost
     unlocked = true, --where it is unlocked or not: if true, 
@@ -707,7 +707,7 @@ SMODS.Joker{ -- Memory Card
 			context.using_consumeable or context.skip_blind or context.card_added)  and
 		not card.debuff and not context.blueprint then
 		
-			if (G.jokers.cards and card.ability.extra.jokers < #G.jokers.cards) or 
+			if --(G.jokers.cards and card.ability.extra.jokers < #G.jokers.cards) or 
 			(context.skipping_booster or context.using_consumeable or context.card_added and card.ability.extra.in_booster == false) then return end
 			
 			if not context.open_booster then card.ability.extra.in_booster = false end
@@ -1108,7 +1108,7 @@ SMODS.Joker{ -- Lemur
 				end
 				return {
 					extra = {message = localize('k_upgrade_ex'), colour = G.C.CHIPS},
-					colour = G.C.CHIPS,
+					colour = G.C.MULT,
 					card = context.blueprint_card or card
 				}
 			end
@@ -1167,11 +1167,16 @@ SMODS.Joker{ -- Lambda Cache
 				end
 				if hands ~= 0 then 
 				ease_hands_played(hands)
-				card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize{type = 'variable', key = 'a_hands', vars = {hands}}}) 
+				--card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize{type = 'variable', key = 'a_hands', vars = {hands}}}) 
 				end
 				if discards ~= 0 then 
 				ease_discard(discards)
-				card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize{type = 'variable', key = 'a_discards', vars = {discards}}}) 
+				--card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize{type = 'variable', key = 'a_discards', vars = {discards}}}) 
+				end
+				if context.blueprint then
+					context.blueprint_card:juice_up()
+				else
+					card:juice_up()
 				end
 			return true end }))
 		end
@@ -1753,7 +1758,7 @@ SMODS.Joker{ -- Deaeth card
 				table.insert(card.ability.extra.cur_jokers, v.config.center.key)
 			end
 		end
-		if context.setting_blind or context.joker_main then
+		if (context.setting_blind and context.cardarea = G.jokers) or context.joker_main then
 			if not context.blueprint then
 				local inserted = false
 				for k, v in pairs(card.ability.extra.cur_jokers) do
@@ -1794,17 +1799,11 @@ SMODS.Joker{ -- Deaeth card
 				G.jokers:emplace(_joker)
 				_joker:start_materialize()
 				G.GAME.joker_buffer = 0
+				card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_copied_ex'), colour = G.C.DARK_EDITION})
 				
 				if not context.blueprint then 
 				card.ability.extra.stored_jokers = {}
 				end
-				
-				return {
-					message = localize('k_copied_ex'),
-					colour = G.C.DARK_EDITION,
-					delay = 0.45, 
-					card = context.blueprint_card or card
-				}
 			end
 		end
     end,
