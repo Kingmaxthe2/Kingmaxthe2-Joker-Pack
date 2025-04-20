@@ -2406,7 +2406,7 @@ SMODS.Joker{ -- Dog's Ball
         }]]
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 2, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
+    rarity = 1, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
     --soul_pos = { x = 0, y = 0 },
     cost = 5, --cost
     unlocked = true, --where it is unlocked or not: if true, 
