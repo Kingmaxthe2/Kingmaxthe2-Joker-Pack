@@ -704,11 +704,11 @@ SMODS.Joker{ -- Memory Card
 		
 		if (context.ending_shop or context.open_booster or context.skipping_booster or
 			context.reroll_shop or context.hand_drawn or (context.end_of_round and context.other_card == card) or
-			context.using_consumeable or context.skip_blind or context.card_added)  and
+			context.using_consumeable or context.skip_blind or context.playing_card_added or context.card_added)  and
 		not card.debuff and not context.blueprint then
 		
 			if --(G.jokers.cards and card.ability.extra.jokers < #G.jokers.cards) or 
-			(context.skipping_booster or context.using_consumeable or context.card_added and card.ability.extra.in_booster == false) then return end
+			((context.skipping_booster or context.using_consumeable or context.playing_card_added or context.card_added) and card.ability.extra.in_booster == false) then return end
 			
 			if not context.open_booster then card.ability.extra.in_booster = false end
 			
@@ -1758,7 +1758,7 @@ SMODS.Joker{ -- Deaeth card
 				table.insert(card.ability.extra.cur_jokers, v.config.center.key)
 			end
 		end
-		if (context.setting_blind and context.cardarea = G.jokers) or context.joker_main then
+		if (context.setting_blind and context.cardarea == G.jokers) or context.joker_main then
 			if not context.blueprint then
 				local inserted = false
 				for k, v in pairs(card.ability.extra.cur_jokers) do
@@ -1945,10 +1945,13 @@ SMODS.Joker{ -- Gravel Eater
     end,
     calculate = function(self,card,context)
 		if context.before and not context.blueprint then
+			local cyan = false
             for k, v in ipairs(context.full_hand) do
                 if v.ability.name == 'Stone Card' and v.ability.edition ~= "Foil" then
                     v:set_edition({foil = true}, true)
+					local cyan = true
                 end
+				if cyan then card:juice_up() end
             end
         end
 		if context.individual and context.cardarea == G.play then
