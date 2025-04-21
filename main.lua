@@ -473,15 +473,10 @@ SMODS.Joker{ -- Minesweeper
     calculate = function(self,card,context)
 		if context.cardarea == G.play and context.individual then
 			local rank = context.other_card:get_id()
-			if rank == 14 then
+			if rank and ((rank < 9 and rank > 0) or rank == 14) then
 				return {
-					chips = card.ability.extra.Xchips,
-					card = context.other_card
-				}
-			elseif rank and rank < 9 and rank > 0 then
-				return {
-					chips = rank * card.ability.extra.Xchips,
-					card = context.other_card
+					chips = (rank == 14 and 1 or rank) * card.ability.extra.Xchips,
+					card = context.blueprint_card or card
 				}
 			end
 		end	
@@ -1312,14 +1307,20 @@ SMODS.Joker{ -- Dark Tar
 					
                 end
             end
-			card.ability.extra.h_size = card.ability.extra.h_size + card.ability.extra.h_mod
-			G.hand:change_size(-card.ability.extra.h_mod)
             if thunk > 0 then
                 return{
-                    message = localize('e_negative', 'Edition'),
+                    message = localize('negative', 'labels'),
                     colour = G.C.DARK_EDITION
                 }
 			end
+		end
+		if context.end_of_round and not context.individual and not context.blueprint then
+			card.ability.extra.h_size = card.ability.extra.h_size + card.ability.extra.h_mod
+			G.hand:change_size(-card.ability.extra.h_mod)
+			return {
+					message = localize{type='variable',key='a_handsize_minus',vars={card.ability.extra.h_mod}},
+					colour = G.C.RED
+				}
 		end
     end,
 	add_to_deck = function(self, card, from_debuff)
