@@ -629,7 +629,7 @@ SMODS.Joker{ -- Memory Card
         name = "Memory Card",
         text = {
           "{C:chips}+#3#{} Chips when run is {C:chips}Saved",
-           --"with less than {C:attention}#2#{} jokers",
+           "with at least {C:attention}#2#{} empty joker slots",
 		  '{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)'
         },
         --[[unlock = {
@@ -655,7 +655,7 @@ SMODS.Joker{ -- Memory Card
       }
     },
 	loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.chips, center.ability.extra.jokers + 1, center.ability.extra.amount}} --#1# is replaced with card.ability.extra.mult
+        return {vars = {center.ability.extra.chips, center.ability.extra.jokers, center.ability.extra.amount}} --#1# is replaced with card.ability.extra.mult
     end,
     check_for_unlock = function(self, args)
         if args.type == 'amogus' then --not a real type, just a joke
@@ -702,7 +702,7 @@ SMODS.Joker{ -- Memory Card
 			context.using_consumeable or context.skip_blind or context.playing_card_added or context.card_added)  and
 		not card.debuff and not context.blueprint then
 		
-			if --(G.jokers.cards and card.ability.extra.jokers < #G.jokers.cards) or 
+			if (G.jokers.cards and (G.jokers.config.card_limit - #G.jokers.cards) < card.ability.extra.jokers) or 
 			((context.skipping_booster or context.using_consumeable or context.playing_card_added or context.card_added) and card.ability.extra.in_booster == false) then return end
 			
 			if not context.open_booster then card.ability.extra.in_booster = false end
@@ -2076,10 +2076,10 @@ SMODS.Joker{ -- Thousandaire
     loc_txt = { -- local text
         name = 'Thousandaire',
         text = {
-			'Scored cards {C:attention}#1# or less{} slots away',
-			'from a {C:attention}King{} on the right give {C:money}${} equal',
-			"to it's {C:chips}Chip{} score divided by distance",
-			'{C:attention}Distance Equal to Digits{} in your {C:money}${}'
+			'Scored number cards within {C:attention}#1# Slot(s){} to',
+            'the left of a {C:attention}King{} earn {C:money}${} equal to their',
+            '{C:chips}Chip{} score divided by distance to {C:attention}King{}',
+            '{C:attention}Slots{} = {C:attention}Digits{} in your {C:money}${}'
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
