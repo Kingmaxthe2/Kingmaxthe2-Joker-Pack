@@ -765,9 +765,11 @@ end
 local isface_old = Card.is_face
 function Card:is_face(from_boss) -- modifier for fem jack "Jane"
 	if self.debuff and not from_boss then return end
+	local id = Getid_old(self)
 	local ret = isface_old(self, from_boss)
-	local id = self:get_id()
-	if not ret and id == 10 and next(find_joker("j_KMJS_fem_jack")) then ret = true end
+	if (not ret or ret == false) and id == 10 and next(find_joker("j_KMJS_fem_jack")) then
+		return true
+	end
 	return ret
 end
 
@@ -2149,7 +2151,7 @@ SMODS.Joker{ -- cone :3
         name = "Yellow Cone",
         text = {
           '{C:attention}Unscored{} cards permanently gain {C:chips}Chips',
-		  "equal to double {C:attention}Played Hand's{} {C:mult}Mult",
+		  "equal to {C:attention}Played Hand's{} {C:mult}Mult",
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -2203,7 +2205,7 @@ SMODS.Joker{ -- cone :3
 	end,
 	calculate = function(self,card,context)
 		if context.before then
-			local changed = false
+			local scoreMult = G.GAME.hands[context.scoring_name].mult
             for k, v in ipairs(context.full_hand) do
 				local scored = false
                 for j, b in ipairs(context.scoring_hand) do
@@ -2213,26 +2215,20 @@ SMODS.Joker{ -- cone :3
 					end
 				end
 				if not scored then
-					changed = true
-					G.E_MANAGER:add_event(
-						Event({
-						delay = 0.2,
-						func = function() 
-							v.ability.perma_bonus = v.ability.perma_bonus or 0
-							v.ability.perma_bonus = v.ability.perma_bonus + G.GAME.hands[context.scoring_name].mult * 2
-							v:juice_up()
-							return true 
-					end }))
-					play_sound('button', 1.1, 0.7)
+					if  type(mult) ~= "number" then
+						card_eval_status_text(v, 'extra', nil, nil, nil, {message = localize('k_nope_ex'), colour = G.C.RED})
+					else
+						G.E_MANAGER:add_event(
+							Event({
+							func = function() 
+								v.ability.perma_bonus = v.ability.perma_bonus or 0
+								v.ability.perma_bonus = v.ability.perma_bonus + scoreMult
+								return true 
+						end }))
+						card_eval_status_text(v, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex'), colour = G.C.CHIPS})
+					end
 				end
             end
-			if changed then
-				return {
-					extra = {message = localize('k_upgrade_ex'), colour = G.C.CHIPS},
-					colour = G.C.CHIPS,
-					card = context.blueprint_card or card
-				}
-			end
         end
         
     end,
