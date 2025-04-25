@@ -581,12 +581,7 @@ SMODS.Joker{ -- Card House
 	loc_vars = function(self,info_queue,center)
         return {vars = {center.ability.extra.chips}} --#1# is replaced with card.ability.extra.mult
     end,
-    check_for_unlock = function(self, args)
-        if args.type == 'amogus' then --not a real type, just a joke
-            unlock_card(self)
-        end
-        unlock_card(self) --unlocks the card if it isnt unlocked
-    end,	
+     
 	calculate = function(self,card,context)
 		if context.joker_main and (card.ability.extra.chips > 0) then
 			return {
@@ -657,12 +652,7 @@ SMODS.Joker{ -- Memory Card
 	loc_vars = function(self,info_queue,center)
         return {vars = {center.ability.extra.chips, center.ability.extra.jokers, center.ability.extra.amount}} --#1# is replaced with card.ability.extra.mult
     end,
-    check_for_unlock = function(self, args)
-        if args.type == 'amogus' then --not a real type, just a joke
-            unlock_card(self)
-        end
-        unlock_card(self) --unlocks the card if it isnt unlocked
-    end,	
+     
 	set_ability = function(self, card, initial, delay_sprites)
 		local H = card.T.h
 		if card.config.center.discovered or card.bypass_discovery_center then 
@@ -746,12 +736,7 @@ SMODS.Joker{ -- Jane
 	loc_vars = function(self,info_queue,center)
         return {vars = {}} --#1# is replaced with card.ability.extra.mult
     end,
-    check_for_unlock = function(self, args)
-        if args.type == 'amogus' then --not a real type, just a joke
-            unlock_card(self)
-        end
-        unlock_card(self) --unlocks the card if it isnt unlocked
-    end,	
+     
     
 }
 
@@ -803,14 +788,8 @@ SMODS.Joker{ -- Joker? HARDLY KNOW HER!!
 	loc_vars = function(self,info_queue,center)
         return {vars = {}} --#1# is replaced with card.ability.extra.mult
     end,
-    check_for_unlock = function(self, args)
-        if args.type == 'amogus' then --not a real type, just a joke
-            unlock_card(self)
-        end
-        unlock_card(self) --unlocks the card if it isnt unlocked
-    end,	
 	calculate = function(self,card,context)
-		if context.retrigger_joker_check and context.other_card.config.center.key ~= self.key then
+		if context.retrigger_joker_check and context.cardarea == G.jokers and context.other_card.config and context.other_card.config.center.key ~= self.key then
             if string.sub(G.localization.descriptions.Joker[context.other_card.config.center.key].name, -2) == "er" or
 			string.sub(context.other_card.ability.name, -2) == "er" then
 				return {
@@ -2009,12 +1988,7 @@ SMODS.Joker{ -- Barotrauma
 	loc_vars = function(self,info_queue,center)
         return {vars = {center.ability.extra.odds * G.GAME.probabilities.normal, center.ability.extra.chance}} --#1# is replaced with card.ability.extra.mult
     end,
-    check_for_unlock = function(self, args)
-        if args.type == 'amogus' then --not a real type, just a joke
-            unlock_card(self)
-        end
-        unlock_card(self) --unlocks the card if it isnt unlocked
-    end,	
+     
 	calculate = function(self,card,context)
 		if context.joker_main then
 			G.E_MANAGER:add_event(Event({
@@ -2174,12 +2148,7 @@ SMODS.Joker{ -- cone :3
 	loc_vars = function(self,info_queue,center)
         return {vars = {}} --#1# is replaced with card.ability.extra.mult
     end,
-    check_for_unlock = function(self, args)
-        if args.type == 'amogus' then --not a real type, just a joke
-            unlock_card(self)
-        end
-        unlock_card(self) --unlocks the card if it isnt unlocked
-    end,	
+     
 	set_ability = function(self, card, initial, delay_sprites)
 		local H = card.T.h
 		if card.config.center.discovered or card.bypass_discovery_center then 
@@ -2482,12 +2451,7 @@ SMODS.Joker{ -- Whiteboard (ortalab did it first :P)
 	loc_vars = function(self,info_queue,center)
         return {vars = {center.ability.extra.xmult, localize('Diamonds', 'suits_plural'), localize('Hearts', 'suits_plural')}} --#1# is replaced with card.ability.extra.mult
     end,
-    check_for_unlock = function(self, args)
-        if args.type == 'amogus' then --not a real type, just a joke
-            unlock_card(self)
-        end
-        unlock_card(self) --unlocks the card if it isnt unlocked
-    end,	
+     
 	calculate = function(self,card,context)
 		if context.joker_main then
             local red_suits, all_cards = 0, 0
