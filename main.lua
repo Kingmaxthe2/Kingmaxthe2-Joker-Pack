@@ -2151,7 +2151,7 @@ SMODS.Joker{ -- cone :3
         name = "Yellow Cone",
         text = {
           '{C:attention}Unscored{} cards permanently gain {C:chips}Chips',
-		  "equal to {C:attention}Played Hand's{} {C:mult}Mult",
+		  "equal to double {C:attention}Played Hand's{} {C:mult}Mult",
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -2222,7 +2222,7 @@ SMODS.Joker{ -- cone :3
 							Event({
 							func = function() 
 								v.ability.perma_bonus = v.ability.perma_bonus or 0
-								v.ability.perma_bonus = v.ability.perma_bonus + scoreMult
+								v.ability.perma_bonus = v.ability.perma_bonus + scoreMult * 2
 								return true 
 						end }))
 						card_eval_status_text(v, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex'), colour = G.C.CHIPS})
