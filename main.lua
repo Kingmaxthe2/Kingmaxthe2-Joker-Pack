@@ -1476,15 +1476,15 @@ SMODS.Joker{ -- Jelly Bean Jar
 		if context.before and context.cardarea == G.jokers and card.ability.extra.has_won == false
 		and not context.repetition and not context.blueprint then
 			for i = 1, (#context.full_hand - 2) do
-				if not context.full_hand[i]:is_face() and not context.full_hand[i].ability.name == 'Stone Card' then
+				if not (context.full_hand[i]):is_face() and (context.full_hand[i]).ability.name ~= 'Stone Card' then
 					for j = 0, 2 do
 						local num = 0
-						if context.full_hand[i + j]:get_id() == 14 then
+						if (context.full_hand[i + j]):get_id() == 14 then
 						num = 1
-						elseif context.full_hand[i + j]:get_id() < 10  and context.full_hand[i + j]:get_id() > 0 then
-						num = context.full_hand[i + j]:get_id()
+						elseif (context.full_hand[i + j]):get_id() < 10  and (context.full_hand[i + j]):get_id() > 0 then
+						num = (context.full_hand[i + j]):get_id()
 						end
-						card.ability.extra.guess = card.ability.extra.guess..num
+						card.ability.extra.guess = card.ability.extra.guess .. num
 					end
 				break
 				end
